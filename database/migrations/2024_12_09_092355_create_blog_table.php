@@ -9,9 +9,17 @@ return new class extends Migration{
         Schema::create("blog", function (Blueprint $table) {
             $table->id();
             $table->string("title", 255)->nullable(false);
-            $table->text("Content")->nullable(false);
-            $table->dateTime("createdDate")->nullable(false);
+            $table->text("content")->nullable(false);
             $table->boolean("isService")->nullable(false);
+            $table->dateTime("createdDate")->nullable(false);
+
+            $table->bigInteger("blogCategoryId")->unsigned()->nullable(false);
+            $table->bigInteger("adminId")->unsigned()->nullable(false);
+            
+            $table->foreign("blogCategoryId")->references("id")->on("blog_category")
+            ->onUpdate("cascade")->onDelete("cascade");
+            $table->foreign("adminId")->references("id")->on("admin")
+            ->onUpdate("cascade")->onDelete("cascade");
         });
     }
 

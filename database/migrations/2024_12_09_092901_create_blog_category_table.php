@@ -9,7 +9,7 @@ return new class extends Migration{
         Schema::create("blog_category", function (Blueprint $table) {
             $table->id();
             $table->string("name", 255)->nullable(false);
-            $table->bigInteger("menuId")->nullable(false);
+            $table->bigInteger("menuId")->unsigned()->nullable(false);
 
             $table->foreign("menuId")->references("id")->on("menu")
             ->onUpdate("cascade")->onDelete("cascade");
