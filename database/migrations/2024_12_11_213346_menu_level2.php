@@ -6,13 +6,13 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration{
     public function up(): void{
-        Schema::create("tag", function (Blueprint $table) {
-            $table->id();
-            $table->string("name", 255)->unique()->nullable(false);
-        });
+        DB::unprepared("
+            create or replace view menu_level2 as 
+                select * from menu where level = 2
+        ");
     }
 
     public function down(): void{
-        Schema::dropIfExists("tag");
+        DB::unprepared("drop view if exists menu_level2");
     }
 };

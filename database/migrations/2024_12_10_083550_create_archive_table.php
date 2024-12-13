@@ -6,13 +6,13 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration{
     public function up(): void{
-        Schema::create("tag", function (Blueprint $table) {
+        Schema::create("archive", function (Blueprint $table) {
             $table->id();
-            $table->string("name", 255)->unique()->nullable(false);
+            $table->date("archiveDate")->nullable(false);
         });
     }
 
     public function down(): void{
-        Schema::dropIfExists("tag");
+        Schema::dropIfExists("archive");
     }
 };

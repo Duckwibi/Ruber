@@ -1,4 +1,10 @@
-<footer id="site-footer" class="site-footer background">
+@php
+    $titles = [
+        "Not Found Page",
+    ];
+@endphp
+
+<footer id="site-footer" class="site-footer {{ in_array($title, $titles) ? "" : "background" }}">
     <div class="footer">
         <div class="section-padding">
             <div class="section-container">
@@ -10,16 +16,10 @@
                                 <div class="block-content">
                                     <ul>
                                         <li>
-                                            <a href="page-contact.html">616.774.0561</a>
+                                            <a href="page-contact.html">0397.941.915</a>
                                         </li>
                                         <li>
-                                            <a href="page-contact.html">866.453.4748</a>
-                                        </li>
-                                        <li>
-                                            <a href="page-contact.html">HR Fax: 810.222.5439</a>
-                                        </li>
-                                        <li>
-                                            <a href="page-contact.html">sales@ruperfurniture.com</a>
+                                            <a href="page-contact.html">bluefoxna@gmail.com</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -27,10 +27,10 @@
 
                             <div class="block block-social">
                                 <ul class="social-link">
+                                    <li><a href="#"><i class="fa fa-facebook"></i></a></li>
                                     <li><a href="#"><i class="fa fa-twitter"></i></a></li>
                                     <li><a href="#"><i class="fa fa-instagram"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-dribbble"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-behance"></i></a></li>
+                                    <li><a href="#"><i class="fa fa-youtube"></i></a></li>
                                 </ul>
                             </div>
                         </div>
@@ -38,9 +38,9 @@
                             <div class="block block-menu">
                                 <h2 class="block-title">Showroom</h2>
                                 <div class="block-content">
-                                    <p>1000 84th Street SW , Byron Center, MI 49315</p>
-                                    <p>AmericasMart Bldg. #1</p>
-                                    <p>Suite 5C-1, Atlanta, GA 30303</p>
+                                    <p>15/2H, Nguyen Van Troi street</p>
+                                    <p>Ben Thuy, Vinh</p>
+                                    <p>Nghe An, Vietnam</p>
                                 </div>
                             </div>
                         </div>

@@ -12,6 +12,7 @@ return new class extends Migration{
             $table->text("content")->nullable(false);
             $table->boolean("isService")->nullable(false);
             $table->dateTime("createdDate")->nullable(false);
+            $table->string("image", 1000)->nullable(false);
 
             $table->bigInteger("blogCategoryId")->unsigned()->nullable(false);
             $table->bigInteger("adminId")->unsigned()->nullable(false);

@@ -15,6 +15,12 @@ use App\MyFunction\Utilities;
 
 class Authenticate extends Controller{
     public function registerPage(): mixed{
+        
+        if(Auth::check()){
+            Auth::logout();
+            request()->session()->invalidate();
+            request()->session()->regenerateToken();
+        }
         return view("Customer.Register")->with(["title" => "Register Page"]);
     }
 
@@ -85,39 +91,12 @@ class Authenticate extends Controller{
     }
 
     public function verifyEmailPage(): mixed{
-
-        if(!request()->session()->has("registerData")){
-            return redirect("/404");
-        }
-        
-        $registerData = (object)request()->session()->get("registerData");
-
-        if(Utilities::dateCompare(date("Y-m-d H:i:s"), $registerData->expired) == 1){
-            request()->session()->forget("registerData");
-            return redirect("/404");
-        }
-
         return view("Customer.VerifyEmail")->with(["title" => "Verify Email Page"]);
     }
 
     public function verifyEmail(): mixed{
-
-        if(!request()->session()->has("registerData")){
-            return response()->json([
-                "error" => "/404"
-            ])->withHeaders(["Content-type" => "application/json"]);
-        }
         
         $registerData = (object)request()->session()->get("registerData");
-
-        if(Utilities::dateCompare(date("Y-m-d H:i:s"), $registerData->expired) == 1){
-            request()->session()->forget("registerData");
-
-            return response()->json([
-                "message" => "The verification code has expired!",
-                "success" => "/Customer/Authenticate/RegisterPage"
-            ])->withHeaders(["Content-type" => "application/json"]);
-        }
             
         $validator = Validator::make(
             request()->all(),
@@ -170,9 +149,11 @@ class Authenticate extends Controller{
 
     public function loginPage(): mixed{
 
-        request()->session()->invalidate();
-        request()->session()->regenerateToken();
-
+        if(Auth::check()){
+            Auth::logout();
+            request()->session()->invalidate();
+            request()->session()->regenerateToken();
+        }
         return view("Customer.Login")->with(["title" => "Login Page"]);
     }
 

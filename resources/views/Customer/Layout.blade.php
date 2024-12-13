@@ -32,7 +32,7 @@
 
 			@yield("Content")
 
-			@include("Customer.Include.Footer")
+			@include("Customer.Include.Footer", ["title" => $title])
 		</div>
 
 		<!-- Back Top button -->
@@ -352,6 +352,25 @@
 		
 		<!-- Site Scripts -->
 		<script src="/Customer/assets/js/app.js"></script>
+		<script>
+			function escapeXml(unsafe){ 
+            	return unsafe.replaceAll("<", "&lt;")
+                	.replaceAll(">", "&gt;")
+                	.replaceAll("&", "&amp;")
+                	.replaceAll("'", "&apos;")
+                	.replaceAll("\"", "&quot;");
+        	};
+
+        	function toCustomDateString(strDate, format){
+            	let date = new Date(strDate.replaceAll(" ", "T"));
+            	let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+            	switch(format){
+                	case("M d, Y"):
+                    	return months[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear();
+            	}
+        	}
+		</script>
 
         @yield("Script")
 	</body>

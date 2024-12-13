@@ -21,8 +21,14 @@ Route::prefix("/Customer")->group(function(): void{
             App\Http\Middleware\Customer\RecaptchaVerify::class
         ]);
         
-        Route::get("/VerifyEmailPage", [App\Http\Controllers\Customer\Authenticate::class, "verifyEmailPage"]);
-        Route::post("/VerifyEmail", [App\Http\Controllers\Customer\Authenticate::class, "verifyEmail"]);
+        Route::get("/VerifyEmailPage", [App\Http\Controllers\Customer\Authenticate::class, "verifyEmailPage"])
+        ->middleware([
+            App\Http\Middleware\Customer\CheckRegisterData::class
+        ]);
+        Route::post("/VerifyEmail", [App\Http\Controllers\Customer\Authenticate::class, "verifyEmail"])
+        ->middleware([
+            App\Http\Middleware\Customer\CheckRegisterData::class
+        ]);
 
         Route::get("/LoginPage", [App\Http\Controllers\Customer\Authenticate::class, "loginPage"]);
         Route::post("/Login", [App\Http\Controllers\Customer\Authenticate::class, "login"])
@@ -34,5 +40,14 @@ Route::prefix("/Customer")->group(function(): void{
     Route::prefix("/Blog")->group(function(): void{
 
         Route::get("/BlogCategoryPage", [App\Http\Controllers\Customer\Blog::class, "blogCategoryPage"]);
+        Route::get("/BlogDetailPage", [App\Http\Controllers\Customer\Blog::class, "blogDetailPage"]);
+        Route::post("/Comment", [App\Http\Controllers\Customer\Blog::class, "comment"])
+        ->middleware([
+            App\Http\Middleware\Customer\CheckLogin::class
+        ]);
+    });
+
+    Route::prefix("/Error")->group(function(): void{
+        Route::get("/NotFoundPage", [App\Http\Controllers\Customer\Error::class, "notFoundPage"]);
     });
 });

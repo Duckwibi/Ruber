@@ -8,7 +8,7 @@ return new class extends Migration{
     public function up(): void{
         Schema::create("blog_category", function (Blueprint $table) {
             $table->id();
-            $table->string("name", 255)->nullable(false);
+            $table->string("name", 255)->unique()->nullable(false);
             $table->bigInteger("menuId")->unsigned()->nullable(false);
 
             $table->foreign("menuId")->references("id")->on("menu")

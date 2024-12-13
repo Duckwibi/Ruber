@@ -9,12 +9,13 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Customer extends Authenticatable{
+class Admin extends Authenticatable{
     use HasApiTokens, HasFactory, Notifiable;
-    protected $table = "customer";
+
+    protected $table = "admin";
     public $timestamps = false;
 
-    public function blogComments(): HasMany{
-        return $this->hasMany(BlogComment::class, "customerId", "id");
+    public function blogs(): HasMany{
+        return $this->hasMany(Blog::class, "adminId", "id");
     }
 }

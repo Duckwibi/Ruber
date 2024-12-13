@@ -154,151 +154,149 @@
                 <li class="level-0 menu-item">
                     <a href="page-contact.html"><span class="menu-item-text">Contact</span></a>
                 </li> -->
-                @foreach($menusLv1 as $menuLv1)
-
-                    @switch($menuLv1->type)
-                        @case(1)
-                            <li class="level-0 menu-item menu-item-has-children mega-menu">
-                                <a><span class="menu-item-text">{{ $menuLv1->name }}</span></a>
-                                <div class="sub-menu menuLv1_id_{{ $menuLv1->id }}_type_1" style="display: none;">
-                                    <div class="row"></div>
-                                </div>
-                            </li>
-                            @break
-
-                        @case(2)
-                            <li class="level-0 menu-item menu-item-has-children">
-                                <a><span class="menu-item-text">{{ $menuLv1->name }}</span></a>
-                                <ul class="sub-menu menuLv1_id_{{ $menuLv1->id }}_type_2" style="display: none;"></ul>
-                            </li>
-                            @break
-
-                        @case(3)
-                            <li class="level-0 menu-item menu-item-has-children mega-menu mega-menu-fullwidth align-center">
-                                <a><span class="menu-item-text">{{ $menuLv1->name }}</span></a>
-                                <div class="sub-menu menuLv1_id_{{ $menuLv1->id }}_type_3" style="display: none;">
+                @foreach($menus as $menu)
+                    @if($menu->type == 1)
+                        <li class="level-0 menu-item {{ count($menu->menuLevel2s) != 0 ? "menu-item-has-children" : "" }} mega-menu">
+                            
+                            <a href="{{ count($menu->menuLevel2s) != 0 ? "#" : $menu->url }}">
+                                <span class="menu-item-text">{{ $menu->name }}</span>
+                            </a>
+                            @if(count($menu->menuLevel2s) != 0)
+                                <div class="sub-menu">
                                     <div class="row">
-                                        <div class="col-md-5"></div>
-                                        <div class="col-md-7">
-                                        <div class="menu-section">
-                                            <h2 class="sub-menu-title">Recent Posts</h2>
-                                            <div class="block block-posts recent-posts p-t-5">
-                                                <ul class="posts-list">
-                                                    <li class="post-item">
-                                                        <a href="blog-details-right.html" class="post-image">
-                                                            <img src="/Customer/media/blog/1.jpg">
-                                                        </a>
-                                                        <div class="post-content">
-                                                            <h2 class="post-title">
-                                                                <a href="blog-details-right.html">Easy Fixes For Home Decor</a>
-                                                            </h2>
-                                                            <div class="post-time">
-                                                                <span class="post-date">May 30, 2022</span>
-                                                                <span class="post-comment">4 Comments</span>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                    <li class="post-item">
-                                                        <a href="blog-details-right.html" class="post-image">
-                                                            <img src="/Customer/media/blog/2.jpg">
-                                                        </a>
-                                                        <div class="post-content">
-                                                            <h2 class="post-title">
-                                                                <a href="blog-details-right.html">How To Make Your Home A
-                                                                    Showplace</a>
-                                                            </h2>
-                                                            <div class="post-time">
-                                                                <span class="post-date">Aug 24, 2022</span>
-                                                                <span class="post-comment">2 Comments</span>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                </ul>
+                                        @foreach($menu->menuLevel2s as $menuLevel2)
+                                            <div class="col-md-6">
+                                                <div class="menu-section">
+                                                    <h2 class="sub-menu-title">{{ $menuLevel2->name }}</h2>
+                                                    @if(count($menuLevel2->menuLevel3s) != 0)
+                                                        <ul class="menu-list">
+                                                            @foreach($menuLevel2->menuLevel3s as $menuLevel3)
+                                                                @php
+                                                                    $url = isset($menuLevel3->blogCategory) ? "/Customer/Blog/BlogCategoryPage?id=" . $menuLevel3->blogCategory->id : $menuLevel3->url;
+                                                                    $name = isset($menuLevel3->blogCategory) ? $menuLevel3->blogCategory->name : $menuLevel3->name;
+                                                                @endphp
+                                                                <li>
+                                                                    <a href="{{ $url }}">
+                                                                        <span class="menu-item-text">{{ $name }}</span>
+                                                                    </a>
+                                                                </li>
+                                                            @endforeach
+                                                        </ul>
+                                                    @endif
+                                                </div>
                                             </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endif
+                        </li>
+                    @endif
+
+                    @if($menu->type == 2)
+                        <li class="level-0 menu-item {{ count($menu->menuLevel2s) != 0 ? "menu-item-has-children" : "" }}">
+
+                            <a href="{{ count($menu->menuLevel2s) != 0 ? "#" : $menu->url }}">
+                                <span class="menu-item-text">{{ $menu->name }}</span>
+                            </a>
+                            @if(count($menu->menuLevel2s) != 0)
+                                <ul class="sub-menu">
+                                    @foreach($menu->menuLevel2s as $menuLevel2)
+                                        <li class="level-1 menu-item {{ count($menuLevel2->menuLevel3s) != 0 ? "menu-item-has-children" : "" }}">
+                                            
+                                            <a href="{{ count($menuLevel2->menuLevel3s) != 0 ? "#" : $menuLevel2->url }}">
+                                                <span class="menu-item-text">{{ $menuLevel2->name }}</span>
+                                            </a>
+                                            @if(count($menuLevel2->menuLevel3s) != 0)
+                                                <ul class="sub-menu">
+                                                    @foreach($menuLevel2->menuLevel3s as $menuLevel3)
+                                                        @php
+                                                            $url = isset($menuLevel3->blogCategory) ? "/Customer/Blog/BlogCategoryPage?id=" . $menuLevel3->blogCategory->id : $menuLevel3->url;
+                                                            $name = isset($menuLevel3->blogCategory) ? $menuLevel3->blogCategory->name : $menuLevel3->name;
+                                                        @endphp
+                                                        <li>
+                                                            <a href="{{ $url }}">
+                                                                <span class="menu-item-text">{{ $name }}</span>
+                                                            </a>
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                            @endif
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @endif
+                        </li>
+                    @endif
+
+                    @if($menu->type == 3)
+                        <li class="level-0 menu-item {{ count($menu->menuLevel2s) != 0 ? "menu-item-has-children" : "" }} mega-menu mega-menu-fullwidth align-center">
+                            
+                            <a href="{{ count($menu->menuLevel2s) != 0 ? "#" : $menu->url }}">
+                                <span class="menu-item-text">{{ $menu->name }}</span>
+                            </a>
+                            @if(count($menu->menuLevel2s) != 0)
+                                <div class="sub-menu">
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            @foreach($menu->menuLevel2s as $menuLevel2)
+                                                <div class="menu-section">
+                                                    <h2 class="sub-menu-title">{{ $menuLevel2->name }}</h2>
+                                                    @if(count($menuLevel2->menuLevel3s) != 0)
+                                                        <ul class="menu-list">
+                                                            @foreach($menuLevel2->menuLevel3s as $menuLevel3)
+                                                                @php
+                                                                    $url = isset($menuLevel3->blogCategory) ? "/Customer/Blog/BlogCategoryPage?id=" . $menuLevel3->blogCategory->id : $menuLevel3->url;
+                                                                    $name = isset($menuLevel3->blogCategory) ? $menuLevel3->blogCategory->name : $menuLevel3->name;
+                                                                @endphp
+                                                                <li>
+                                                                    <a href="{{ $url }}">
+                                                                        <span class="menu-item-text">{{ $name }}</span>
+                                                                    </a>
+                                                                </li>
+                                                            @endforeach
+                                                        </ul>
+                                                    @endif
+                                                </div>
+                                            @endforeach
                                         </div>
+                                        <div class="col-md-7">
+                                            <div class="menu-section">
+                                                <h2 class="sub-menu-title">Recent Posts</h2>
+                                                <div class="block block-posts recent-posts p-t-5">
+                                                    <ul class="posts-list">
+                                                        @foreach($blogs as $blog)
+                                                            <li class="post-item">
+                                                                <a href="/Customer/Blog/BlogDetailPage?id={{ $blog->id }}" class="post-image">
+                                                                    <img src="{{ $blog->image }}" alt="{{ $blog->image }}">
+                                                                </a>
+                                                                <div class="post-content">
+                                                                    <h2 class="post-title">
+                                                                        <a href="/Customer/Blog/BlogDetailPage?id={{ $blog->id }}">{{ $blog->title }}</a>
+                                                                    </h2>
+                                                                    <div class="post-time">
+                                                                        <span class="post-date">
+                                                                            {{ date("M d, Y", strtotime($blog->createdDate)) }}
+                                                                        </span>
+                                                                        <span class="post-comment commentCount_blogId_{{ $blog->id }}_type_1">
+                                                                            {{ $blog->blog_comments_count }}
+                                                                            {{ $blog->blog_comments_count <= 1 ? "comment" : "comments" }}
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                        @endforeach
+                                                    </ul>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </li>
-                            @break
+                            @endif
+                        </li>
+                    @endif
 
-                        @default
-                            <li class="level-0 menu-item">
-                                <a href="{{ $menuLv1->url }}"><span class="menu-item-text">{{ $menuLv1->name }}</span></a>
-                            </li>
-                    @endswitch
                 @endforeach
             </ul>
         </nav>
     </div>
 </div>
-
-<script>
-    @foreach($menusLv2 as $menuLv2)
-        if(document.querySelector(".menuLv1_id_{{ $menuLv2->parentId }}_type_1") != null){
-
-            document.querySelector(".menuLv1_id_{{ $menuLv2->parentId }}_type_1").style.display = "block";
-            document.querySelector(".menuLv1_id_{{ $menuLv2->parentId }}_type_1>div").innerHTML +=
-                "<div class=\"col-md-6\">" +
-                    "<div class=\"menu-section\">" +
-                        "<h2 class=\"sub-menu-title\">{{ $menuLv2->name }}</h2>" +
-                        "<ul class=\"menu-list menuLv2_id_{{ $menuLv2->id }}_type_1\" style=\"display: none;\"></ul>" +
-                    "</div>" +
-                "</div>";
-        }
-
-        if(document.querySelector(".menuLv1_id_{{ $menuLv2->parentId }}_type_2") != null){
-
-            document.querySelector(".menuLv1_id_{{ $menuLv2->parentId }}_type_2").style.display = "block";
-            document.querySelector(".menuLv1_id_{{ $menuLv2->parentId }}_type_2").innerHTML +=
-                
-                "<li class=\"menuLv2_id_{{ $menuLv2->id }}_type_2_tag_li level-1 menu-item\">" +
-                    "<a href=\"{{ $menuLv2->url }}\" class=\"menuLv2_id_{{ $menuLv2->id }}_type_2_tag_a\">" +
-                        "<span class=\"menu-item-text\">{{ $menuLv2->name }}</span>" +
-                    "</a>" +
-                    "<ul class=\"sub-menu menuLv2_id_{{ $menuLv2->id }}_type_2\" style=\"display: none;\"></ul>" +
-                "</li>";
-        }
-
-        if(document.querySelector(".menuLv1_id_{{ $menuLv2->parentId }}_type_3") != null){
-
-            document.querySelector(".menuLv1_id_{{ $menuLv2->parentId }}_type_3").style.display = "block";
-            document.querySelector(".menuLv1_id_{{ $menuLv2->parentId }}_type_3>div>.col-md-5").innerHTML +=
-                "<div class=\"menu-section\">" +
-                    "<h2 class=\"sub-menu-title\">{{ $menuLv2->name }}</h2>" +
-                    "<ul class=\"menu-list menuLv2_id_{{ $menuLv2->id }}_type_2\" style=\"display: none;\"></ul>" +
-                "</div>";
-        }
-    @endforeach
-
-    @foreach($menusLv3 as $menuLv3)
-        if(document.querySelector(".menuLv2_id_{{ $menuLv3->parentId }}_type_1") != null){
-
-            document.querySelector(".menuLv2_id_{{ $menuLv3->parentId }}_type_1").style.display = "block";
-            document.querySelector(".menuLv2_id_{{ $menuLv3->parentId }}_type_1").innerHTML +=
-                "<li>" +
-                    "<a href=\"{{ $menuLv3->url }}\"><span class=\"menu-item-text\">{{ $menuLv3->name }}</span></a>" +
-                "</li>";
-        }
-
-        if(document.querySelector(".menuLv2_id_{{ $menuLv3->parentId }}_type_2") != null){
-
-            document.querySelector(".menuLv2_id_{{ $menuLv3->parentId }}_type_2").style.display = "block";
-            document.querySelector(".menuLv2_id_{{ $menuLv3->parentId }}_type_2_tag_li").classList.add("menu-item-has-children");
-            document.querySelector(".menuLv2_id_{{ $menuLv3->parentId }}_type_2_tag_a").removeAttribute("href");
-            document.querySelector(".menuLv2_id_{{ $menuLv3->parentId }}_type_2").innerHTML +=
-                "<li>" +
-                    "<a href=\"{{ $menuLv3->url }}\"><span class=\"menu-item-text\">{{ $menuLv3->name }}</span></a>" +
-                "</li>";
-        }
-
-        if(document.querySelector(".menuLv2_id_{{ $menuLv3->parentId }}_type_3") != null){
-
-            document.querySelector(".menuLv2_id_{{ $menuLv3->parentId }}_type_3").style.display = "block";
-            document.querySelector(".menuLv2_id_{{ $menuLv3->parentId }}_type_3").innerHTML +=
-                "<li>" +
-                    "<a href=\"{{ $menuLv3->url }}\"><span class=\"menu-item-text\">{{ $menuLv3->name }}</span></a>" +
-                "</li>";
-        }
-    @endforeach
-</script>
