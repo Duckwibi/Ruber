@@ -11,26 +11,26 @@ class BlogCategorySeeder extends Seeder{
     public function run(): void{
         BlogCategory::factory()->count(5)->state(fn(array $attribute): array => [
             "name" => fake()->name(),
-            "menuId" => 11
+            "menuId" => 15
         ])->sequence(
             fn(Sequence $sequence): array => [
                 "name" => "Dinning & Kitchen",
             ],
             fn(Sequence $sequence): array => [
                 "name" => "Funiture",
-                "menuId" => 12
+                "menuId" => 16
             ],
             fn(Sequence $sequence): array => [
                 "name" => "Home Décor",
-                "menuId" => 13
+                "menuId" => 17
             ],
             fn(Sequence $sequence): array => [
                 "name" => "Life Style",
-                "menuId" => 14
+                "menuId" => 18
             ],
             fn(Sequence $sequence): array => [
                 "name" => "Office",
-                "menuId" => 15
+                "menuId" => 19
             ]
         )->create();
     }

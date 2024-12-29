@@ -171,13 +171,9 @@
                                                     @if(count($menuLevel2->menuLevel3s) != 0)
                                                         <ul class="menu-list">
                                                             @foreach($menuLevel2->menuLevel3s as $menuLevel3)
-                                                                @php
-                                                                    $url = isset($menuLevel3->blogCategory) ? "/Customer/Blog/BlogCategoryPage?id=" . $menuLevel3->blogCategory->id : $menuLevel3->url;
-                                                                    $name = isset($menuLevel3->blogCategory) ? $menuLevel3->blogCategory->name : $menuLevel3->name;
-                                                                @endphp
                                                                 <li>
-                                                                    <a href="{{ $url }}">
-                                                                        <span class="menu-item-text">{{ $name }}</span>
+                                                                    <a href="{{ $menuLevel3->url }}">
+                                                                        <span class="menu-item-text">{{ $menuLevel3->name }}</span>
                                                                     </a>
                                                                 </li>
                                                             @endforeach
@@ -202,20 +198,20 @@
                                 <ul class="sub-menu">
                                     @foreach($menu->menuLevel2s as $menuLevel2)
                                         <li class="level-1 menu-item {{ count($menuLevel2->menuLevel3s) != 0 ? "menu-item-has-children" : "" }}">
-                                            
-                                            <a href="{{ count($menuLevel2->menuLevel3s) != 0 ? "#" : $menuLevel2->url }}">
-                                                <span class="menu-item-text">{{ $menuLevel2->name }}</span>
+
+                                            @php
+                                                $url = isset($menuLevel2->productCategory) ? "/Customer/Product/ProductCategoryPage?id=" . $menuLevel2->productCategory->id : $menuLevel2->url;
+                                                $name = isset($menuLevel2->productCategory) ? $menuLevel2->productCategory->name : $menuLevel2->name;
+                                            @endphp
+                                            <a href="{{ count($menuLevel2->menuLevel3s) != 0 ? "#" : $url }}">
+                                                <span class="menu-item-text">{{ $name }}</span>
                                             </a>
                                             @if(count($menuLevel2->menuLevel3s) != 0)
                                                 <ul class="sub-menu">
                                                     @foreach($menuLevel2->menuLevel3s as $menuLevel3)
-                                                        @php
-                                                            $url = isset($menuLevel3->blogCategory) ? "/Customer/Blog/BlogCategoryPage?id=" . $menuLevel3->blogCategory->id : $menuLevel3->url;
-                                                            $name = isset($menuLevel3->blogCategory) ? $menuLevel3->blogCategory->name : $menuLevel3->name;
-                                                        @endphp
                                                         <li>
-                                                            <a href="{{ $url }}">
-                                                                <span class="menu-item-text">{{ $name }}</span>
+                                                            <a href="{{ $menuLevel3->url }}">
+                                                                <span class="menu-item-text">{{ $menuLevel3->name }}</span>
                                                             </a>
                                                         </li>
                                                     @endforeach

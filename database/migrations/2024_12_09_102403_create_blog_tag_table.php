@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration{
     public function up(): void{
-        Schema::create("blog_tag", function (Blueprint $table) {
+        Schema::create("blog_tag", function (Blueprint $table): void {
             $table->id();
             $table->bigInteger("blogId")->unsigned()->nullable(false);
             $table->bigInteger("tagId")->unsigned()->nullable(false);

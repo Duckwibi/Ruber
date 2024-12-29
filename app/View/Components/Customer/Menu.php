@@ -21,6 +21,7 @@ class Menu extends Component{
         ->with([
             "menuLevel2s" => function(Builder $query): void{
                 $query->orderBy("order")->with([
+                    "productCategory",
                     "menuLevel3s" => function(Builder $query): void{
                         $query->orderBy("order")->with("blogCategory");
                     }

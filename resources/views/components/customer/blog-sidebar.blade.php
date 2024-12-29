@@ -48,7 +48,7 @@
                         </a>
                         <div class="post-content">
                             <h2 class="post-title">
-                                <a href="#">{{ $blog->title }}</a>
+                                <a href="/Customer/Blog/BlogDetailPage?id={{ $blog->id }}">{{ $blog->title }}</a>
                             </h2>
                             <div class="post-time">
                                 <span class="post-date">{{ date("M d, Y", strtotime($blog->createdDate)) }}</span>

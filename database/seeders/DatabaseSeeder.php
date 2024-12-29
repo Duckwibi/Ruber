@@ -17,6 +17,17 @@ class DatabaseSeeder extends Seeder{
             BlogSeeder::class,
             BlogCommentSeeder::class,
             BlogTagSeeder::class,
+            ProductCategorySeeder::class,
+            BrandSeeder::class,
+            ProductSeeder::class,
+            ProductDetailImageSeeder::class,
+            ProductReviewSeeder::class,
+            PriceFilterSeeder::class,
+            CartSeeder::class,
+            WishlistSeeder::class,
+            CouponCodeSeeder::class,
+            OrderSeeder::class,
+            OrderDetailSeeder::class,
         ]);
     }
 }

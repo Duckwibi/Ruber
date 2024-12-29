@@ -31,8 +31,10 @@ class BlogSidebar extends Component{
         ->get();
 
         $this->archives = Archive::orderByDesc("archiveDate")->get();
-        $this->tags = Tag::whereHas("blogs", function(Builder $query): void{
-            $query->where("blog.blogCategoryId", $this->id);
+
+        $id = $this->id;
+        $this->tags = Tag::whereHas("blogs", function(Builder $query) use($id): void{
+            $query->where("blog.blogCategoryId", $id);
         })->get();
 
         return view("components.customer.blog-sidebar");

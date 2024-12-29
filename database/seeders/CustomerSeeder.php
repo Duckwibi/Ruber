@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Customer;
+use App\MyFunction\Utilities;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Database\Seeder;
@@ -15,15 +16,16 @@ class CustomerSeeder extends Seeder{
             "email" => fake()->email(),
             "password" => Hash::make("1234"),
             "firstName" => fake()->firstName(),
-            "lastName" => fake()->lastName()
+            "lastName" => fake()->lastName(),
+            "loginKey" => Utilities::getRandomKey(64),
         ])->sequence(
             fn(Sequence $sequence): array => [
                 "name" => "DucTran",
-                "email" => "bluefoxna@gmail.com"
+                "email" => "greenfoxna@gmail.com"
             ],
             fn(Sequence $sequence): array => [
                 "name" => "TranDuc",
-                "email" => "greenfoxna@gmail.com"
+                "email" => "blackfoxna@gmail.com"
             ]
         )->create();
     }

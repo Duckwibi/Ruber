@@ -14,6 +14,7 @@ return new class extends Migration{
             $table->rememberToken();
             $table->string("firstName", 255)->nullable(false);
             $table->string("lastName", 255)->nullable(false);
+            $table->string("loginKey", 64)->nullable(false);
         });
     }
 

@@ -117,11 +117,6 @@
                     document.querySelector(".page-preloader").style.display = "none";
                 },
                 error: (jqXHR, textStatus, errorThrown) => {
-                    if(jqXHR.status == 419){
-                        if(confirm("Please reload the page and try again!")){
-                            window.location.reload();
-                        }
-                    }
                     console.log(jqXHR);
                     console.log(textStatus);
                     console.log(errorThrown);

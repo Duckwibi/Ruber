@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration{
     public function up(): void{
-        Schema::create("admin", function (Blueprint $table) {
+        Schema::create("admin", function (Blueprint $table): void {
             $table->id();
             $table->string("name", 255)->unique()->nullable(false);
             $table->string("email", 255)->unique()->nullable(false);

@@ -84,34 +84,37 @@
                                         <div class="entry-social-share">
                                             <label>Share :</label>
                                             <div class="social-share">
-                                                <a href="https://www.facebook.com/sharer/sharer.php?u={{ url("/Customer/Blog/BlogDetailPage?id=" . $blog->id) }}" title="Facebook" class="share-facebook" target="_blank">
+                                                <a href="https://www.facebook.com/sharer/sharer.php?u={{ url()->full() }}" title="Facebook" class="share-facebook" target="_blank">
                                                     <i class="fa fa-facebook"></i>Facebook
                                                 </a>
-                                                <a href="https://twitter.com/intent/tweet?url={{ url("/Customer/Blog/BlogDetailPage?id=" . $blog->id) }}&text=" title="Twitter" class="share-twitter">
+                                                <a href="https://twitter.com/intent/tweet?url={{ url()->full() }}&text=" title="Twitter" class="share-twitter">
                                                     <i class="fa fa-twitter"></i>Twitter
                                                 </a>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="prev-next-post">
-                                        @if(isset($previousBlog))
-                                            <div class="previous-post">
-                                                <a href="/Customer/Blog/BlogDetailPage?id={{ $previousBlog->id }}" rel="prev">
-                                                    <div class="hover-extend active"><span>Previous</span></div>
-                                                    <h2 class="title">{{ $previousBlog->title }}</h2>
-                                                </a>
-                                            </div>
-                                        @endif
+                                    @if(isset($previousBlog) || isset($nextBlog))
+                                        <div class="prev-next-post">
+                                            @if(isset($previousBlog))
+                                                <div class="previous-post">
+                                                    <a href="/Customer/Blog/BlogDetailPage?id={{ $previousBlog->id }}" rel="prev">
+                                                        <div class="hover-extend active"><span>Previous</span></div>
+                                                        <h2 class="title">{{ $previousBlog->title }}</h2>
+                                                    </a>
+                                                </div>
+                                            @endif
                                         
-                                        @if(isset($nextBlog))
-                                            <div class="next-post">
-                                                <a href="/Customer/Blog/BlogDetailPage?id={{ $nextBlog->id }}" rel="next">
-                                                    <div class="hover-extend active"><span>Next</span></div>
-                                                    <h2 class="title">{{ $nextBlog->title }}</h2>
-                                                </a>
-                                            </div>
-                                        @endif
-                                    </div>
+                                            @if(isset($nextBlog))
+                                                <div class="next-post">
+                                                    <a href="/Customer/Blog/BlogDetailPage?id={{ $nextBlog->id }}" rel="next">
+                                                        <div class="hover-extend active"><span>Next</span></div>
+                                                        <h2 class="title">{{ $nextBlog->title }}</h2>
+                                                    </a>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    @endif
+                                    
                                     <div id="comments" class="comments-area">
                                         <h3 class="comments-title commentCount_blogId_{{ $blog->id }}_type_3">
                                             {{ $blog->blog_comments_count }}
@@ -220,11 +223,6 @@
                     document.querySelector(".page-preloader").style.display = "none";
                 },
                 error: (jqXHR, textStatus, errorThrown) => {
-                    if(jqXHR.status == 419){
-                        if(confirm("Please reload the page and try again!")){
-                            window.location.reload();
-                        }
-                    }
                     console.log(jqXHR);
                     console.log(textStatus);
                     console.log(errorThrown);

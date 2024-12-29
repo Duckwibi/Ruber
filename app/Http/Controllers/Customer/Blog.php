@@ -10,7 +10,9 @@ use App\Models\BlogCategory;
 use App\Models\BlogComment;
 use App\Models\Tag;
 use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
@@ -69,7 +71,8 @@ class Blog extends Controller{
             $query->whereHas("tags", function(Builder $query) use($tag): void{
                 $query->where("tag.id", $tag->id);
             });
-        })->count();
+        })
+        ->count();
         
         $page = $blogsCount / 9.0;
         $page = $page - (int)$page == 0 ? $page : (int)$page + 1;
@@ -144,8 +147,23 @@ class Blog extends Controller{
         ->where("createdDate", ">", $blog->createdDate)
         ->orderBy("createdDate")
         ->limit(1)->first();
-
+        
         $currentUser = Auth::check() ? Auth::user() : null;
+        if(isset($currentUser)){
+            if(request()->session()->has("loginKey")){
+                $currentUser = request()->session()->get("loginKey") == $currentUser->loginKey ? $currentUser : null;
+            }else{
+                $currentUser = Cookie::has("loginKey") ? $currentUser : null;
+                if(isset($currentUser)){
+                    $currentUser = Cookie::get("loginKey") == $currentUser->loginKey ? $currentUser : null;
+                    if(isset($currentUser)){
+                        request()->session()->put([
+                            "loginKey" => $currentUser->loginKey
+                        ]);
+                    }
+                }
+            }
+        }
 
         return view("Customer.BlogDetail")->with([
             "title" => "Blog Detail Page",

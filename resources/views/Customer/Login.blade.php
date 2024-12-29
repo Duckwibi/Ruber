@@ -64,7 +64,7 @@
                                                             <label class="inline">Remember me</label>
                                                         </div>
                                                         <div class="lost-password">
-                                                            <a href="page-forgot-password.html">Lost your password?</a>
+                                                            <a href="/Customer/Authenticate/ResetPasswordPage">Lost your password?</a>
                                                         </div>
                                                     </div>
                                                     <div id="recaptchaRender"></div>
@@ -134,11 +134,6 @@
                     document.querySelector(".page-preloader").style.display = "none";
                 },
                 error: (jqXHR, textStatus, errorThrown) => {
-                    if(jqXHR.status == 419){
-                        if(confirm("Please reload the page and try again!")){
-                            window.location.reload();
-                        }
-                    }
                     console.log(jqXHR);
                     console.log(textStatus);
                     console.log(errorThrown);

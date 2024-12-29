@@ -9,7 +9,7 @@ use Illuminate\Database\Seeder;
 
 class MenuSeeder extends Seeder{
     public function run(): void{
-        Menu::factory()->count(15)->state(fn(array $attribute): array => [
+        Menu::factory()->count(19)->state(fn(array $attribute): array => [
             "name" => "Menu",
             "url" => "#",
             "parentId" => 0,
@@ -56,16 +56,34 @@ class MenuSeeder extends Seeder{
                 "order" => 3,
             ],
             fn(Sequence $sequence): array => [
-                "name" => "Demo1",
-                "parentId" => 7,
-                "level" => 3,
+                "parentId" => 2,
+                "level" => 2,
                 "order" => 1,
             ],
             fn(Sequence $sequence): array => [
-                "name" => "Demo2",
-                "parentId" => 7,
-                "level" => 3,
+                "parentId" => 2,
+                "level" => 2,
                 "order" => 2,
+            ],
+            fn(Sequence $sequence): array => [
+                "parentId" => 2,
+                "level" => 2,
+                "order" => 3,
+            ],
+            fn(Sequence $sequence): array => [
+                "parentId" => 2,
+                "level" => 2,
+                "order" => 4,
+            ],
+            fn(Sequence $sequence): array => [
+                "parentId" => 2,
+                "level" => 2,
+                "order" => 5,
+            ],
+            fn(Sequence $sequence): array => [
+                "parentId" => 2,
+                "level" => 2,
+                "order" => 6,
             ],
             fn(Sequence $sequence): array => [
                 "name" => "Blog Category",
@@ -74,32 +92,27 @@ class MenuSeeder extends Seeder{
                 "order" => 1,
             ],
             fn(Sequence $sequence): array => [
-                "url" => "/Customer/Blog/BlogCategoryPage",
-                "parentId" => 10,
+                "parentId" => 14,
                 "level" => 3,
                 "order" => 1,
             ],
             fn(Sequence $sequence): array => [
-                "url" => "/Customer/Blog/BlogCategoryPage",
-                "parentId" => 10,
+                "parentId" => 14,
                 "level" => 3,
                 "order" => 2,
             ],
             fn(Sequence $sequence): array => [
-                "url" => "/Customer/Blog/BlogCategoryPage",
-                "parentId" => 10,
+                "parentId" => 14,
                 "level" => 3,
                 "order" => 3,
             ],
             fn(Sequence $sequence): array => [
-                "url" => "/Customer/Blog/BlogCategoryPage",
-                "parentId" => 10,
+                "parentId" => 14,
                 "level" => 3,
                 "order" => 4,
             ],
             fn(Sequence $sequence): array => [
-                "url" => "/Customer/Blog/BlogCategoryPage",
-                "parentId" => 10,
+                "parentId" => 14,
                 "level" => 3,
                 "order" => 5,
             ],

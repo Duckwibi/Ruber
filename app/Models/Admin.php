@@ -11,11 +11,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Admin extends Authenticatable{
     use HasApiTokens, HasFactory, Notifiable;
-
     protected $table = "admin";
     public $timestamps = false;
-
     public function blogs(): HasMany{
         return $this->hasMany(Blog::class, "adminId", "id");
     }
+    protected $hidden = [
+        "email",
+        "password"
+    ];
 }
