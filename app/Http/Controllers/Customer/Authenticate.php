@@ -129,6 +129,7 @@ class Authenticate extends Controller{
         $customer->firstName = $registerData->firstName;
         $customer->lastName = $registerData->lastName;
         $customer->password = Hash::make($registerData->password);
+        $customer->loginKey = Utilities::getRandomKey(64);
         $customer->save();
 
         request()->session()->forget("registerData");
