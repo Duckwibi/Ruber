@@ -1,10 +1,12 @@
 @php
     $titles = [
-        "Not Found Page",
+        "Not Found Page" => "",
+        "Contact Page" => "m-t-0",
+        "Index Page" => "m-t-0"
     ];
 @endphp
 
-<footer id="site-footer" class="site-footer {{ in_array($title, $titles) ? "" : "background" }}">
+<footer id="site-footer" class="site-footer {{ array_key_exists($title, $titles) ? $titles["$title"] : "background" }}">
     <div class="footer">
         <div class="section-padding">
             <div class="section-container">
@@ -44,33 +46,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-3 col-md-6">
-                            <div class="block block-menu">
-                                <h2 class="block-title">Services</h2>
-                                <div class="block-content">
-                                    <ul>
-                                        <li>
-                                            <a href="page-about.html">Sale</a>
-                                        </li>
-                                        <li>
-                                            <a href="page-about.html">Quick Ship</a>
-                                        </li>
-                                        <li>
-                                            <a href="page-about.html">New Designs</a>
-                                        </li>
-                                        <li>
-                                            <a href="page-about.html">Accidental Fabric Protection</a>
-                                        </li>
-                                        <li>
-                                            <a href="page-about.html">Furniture Care</a>
-                                        </li>
-                                        <li>
-                                            <a href="page-about.html">Gift Cards</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
+                        
+                        <x-customer.service-blog></x-customer.service-blog>
+                        
                         <div class="col-lg-3 col-md-6">
                             <div class="block block-newsletter">
                                 <h2 class="block-title">Newsletter</h2>
@@ -78,7 +56,7 @@
                                     <div class="newsletter-text">Enter your email below to be the first to know about
                                         new collections and product launches.</div>
                                     <form action="#" method="post" class="newsletter-form">
-                                        <input type="email" class="bg-white" name="your-email" value="" size="40"
+                                        <input type="email" class="{{ array_key_exists($title, $titles) ? "" : "bg-white" }}" name="your-email" value="" size="40"
                                             placeholder="Email address">
                                         <span class="btn-submit">
                                             <input type="submit" value="Subscribe">

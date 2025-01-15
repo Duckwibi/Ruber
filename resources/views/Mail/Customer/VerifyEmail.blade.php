@@ -1,12 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <p>Your verification code is: <b>{{ $otp }}</b></p>
-    <p>Your code will expire in 1 minute!</p>
-</body>
-</html>
+<style>
+    p{
+        margin: 0;
+        padding: 0;
+    }
+</style>
+<x-mail::message>
+# Your OTP
+
+<p><strong>Your One-Time Password(OTP) is:</strong></p>
+<x-mail::panel>
+<p><strong>Code:</strong> {{ $otp }}</p>
+</x-mail::panel>
+<p><strong>Do not share this code with anyone! Your code will expire in 1 minute!</strong></p><br>
+
+<p>Thanks,</p>
+<p>Ruper</p>
+</x-mail::message>

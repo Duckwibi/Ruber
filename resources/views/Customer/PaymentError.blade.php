@@ -61,7 +61,7 @@
             <h1>Payment Unsuccessful</h1>
             <p>We're sorry, but your payment could not be processed.</p>
             <p>Please try again later or contact customer support for assistance.</p>
-            <button onclick="window.location.href='/'">Return Home</button>
+            <button onclick="window.location.href='/Customer/Home/IndexPage'">Return Home</button>
         </div>
     </div>
 </body>

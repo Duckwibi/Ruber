@@ -62,7 +62,7 @@
             <h1>Payment Successful</h1>
             <p>Thank you for your payment!</p>
             <p>Your transaction has been completed successfully.</p>
-            <button onclick="window.location.href=''">Return Home</button>
+            <button onclick="window.location.href='/Customer/Home/IndexPage'">Return Home</button>
         </div>
     </div>
 </body>

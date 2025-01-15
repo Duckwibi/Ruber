@@ -28,6 +28,10 @@ class DatabaseSeeder extends Seeder{
             CouponCodeSeeder::class,
             OrderSeeder::class,
             OrderDetailSeeder::class,
+            FailedPaymentSeeder::class,
+            ContactSeeder::class,
+            SliderBannerSeeder::class,
+            BlockBannerSeeder::class
         ]);
     }
 }

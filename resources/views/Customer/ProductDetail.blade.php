@@ -34,7 +34,7 @@
                         <h1 class="text-title-heading">{{ $product->name }}</h1>
                     </div>
                     <div class="breadcrumbs">
-                        <a href="index-2.html">Home</a><span class="delimiter"></span>{{ $product->name }}
+                        <a href="/Customer/Home/IndexPage">Home</a><span class="delimiter"></span>{{ $product->name }}
                     </div>
                 </div>
             </div>

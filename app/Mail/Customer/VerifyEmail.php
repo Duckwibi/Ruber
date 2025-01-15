@@ -11,23 +11,19 @@ use Illuminate\Queue\SerializesModels;
 
 class VerifyEmail extends Mailable implements ShouldQueue{
     use Queueable, SerializesModels;
-
     public function __construct(
         public string $otp
     ){}
-
     public function envelope(): Envelope{
         return new Envelope(
-            subject: "Verify Email",
+            subject: "Verify your email!",
         );
     }
-
     public function content(): Content{
         return new Content(
-            view: "Mail.Customer.VerifyEmail",
+            markdown: "Mail.Customer.VerifyEmail",
         );
     }
-
     public function attachments(): array{
         return [];
     }

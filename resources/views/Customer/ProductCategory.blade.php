@@ -142,7 +142,9 @@
                                                         <div class="products-entry clearfix product-wapper">
                                                             <div class="products-thumb">
                                                                 <div class="product-lable">
-                                                                    <div class="hot">Hot</div>
+                                                                    @if($product->orderQuantityTotal >= 100)
+                                                                        <div class="hot">Hot</div>
+                                                                    @endif
                                                                     @if($product->sale > 0)
                                                                         <div class="onsale">-{{ $product->sale }}%</div>
                                                                     @endif
@@ -191,7 +193,9 @@
                                                         <div class="col-md-4">
                                                             <div class="products-thumb">
                                                                 <div class="product-lable">
-                                                                    <div class="hot">Hot</div>
+                                                                    @if($product->orderQuantityTotal >= 100)
+                                                                        <div class="hot">Hot</div>
+                                                                    @endif
                                                                     @if($product->sale > 0)
                                                                         <div class="onsale">-{{ $product->sale }}%</div>
                                                                     @endif

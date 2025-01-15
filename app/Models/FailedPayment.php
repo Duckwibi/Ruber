@@ -10,7 +10,4 @@ class FailedPayment extends Model{
     use HasFactory;
     protected $table = "failed_payment";
     public $timestamps = false;
-    public function customer(): BelongsTo{
-        return $this->belongsTo(Customer::class, "customerId", "id");
-    }
 }

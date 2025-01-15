@@ -203,7 +203,7 @@ class Cart extends Controller{
             return response()->json([
                 "message" => "Added successfully!",
                 "cartCount" => $cartCount
-            ])->withHeaders(["Content-type" => "application/json"]);   
+            ])->withHeaders(["Content-type" => "application/json"]);
         }
         
         if($quantity > $product->quantity){
@@ -224,7 +224,7 @@ class Cart extends Controller{
         return response()->json([
             "message" => "Added successfully!",
             "cartCount" => $cartCount
-        ])->withHeaders(["Content-type" => "application/json"]);   
+        ])->withHeaders(["Content-type" => "application/json"]);
     }
 
     public function deleteProductFromCart(): mixed{

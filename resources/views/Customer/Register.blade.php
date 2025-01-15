@@ -34,7 +34,7 @@
                         </h1>
                     </div>
                     <div class="breadcrumbs">
-                        <a href="index-2.html">Home</a><span class="delimiter"></span>Register
+                        <a href="/Customer/Home/IndexPage">Home</a><span class="delimiter"></span>Register
                     </div>
                 </div>
             </div>

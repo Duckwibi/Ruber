@@ -95,7 +95,8 @@ class Blog extends Controller{
         })
         ->orderByDesc("createdDate")
         ->limit(9)->offset(($currentPage - 1) * 9)
-        ->with("blogCategory")->withCount("blogComments")->get();
+        ->with("blogCategory")->withCount("blogComments")
+        ->get();
 
 
         return view("Customer.BlogCategory")->with([

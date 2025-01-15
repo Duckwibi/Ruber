@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Mail\Customer\CreateOrder;
+use App\Mail\Customer\OrderSuccess;
 use App\Models\Cart;
 use App\Models\CouponCode;
 use App\Models\Customer;
@@ -18,6 +20,7 @@ use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class Checkout extends Controller{
@@ -54,6 +57,7 @@ class Checkout extends Controller{
 
         $customer = Auth::user();
         $order = new Order();
+        $order->subId = Utilities::getRandomKey(16);
         $order->createdDate = date("Y-m-d H:i:s");
         $order->isPaid = false;
         $order->isApproved = false;
@@ -73,9 +77,20 @@ class Checkout extends Controller{
 
         $order->products()->attach($product->id, [
             "quantity" => $quantity,
-            "price" => $product->price - $product->price * ($product->sale / 100),
-            "createdDate" => date("Y-m-d H:i:s")
+            "price" => $product->price - $product->price * ($product->sale / 100)
         ]);
+
+        Mail::to($customer)->send(new CreateOrder(
+            $order->toArray(),
+            OrderDetail::where("orderId", $order->id)
+            ->selectRaw("
+                order_detail.*,
+                (price * quantity) as subTotal
+            ")
+            ->with("product")
+            ->get()
+            ->toArray()
+        ));
 
         return response()->json([
             "message" => "Please complete the payment process!",
@@ -141,6 +156,7 @@ class Checkout extends Controller{
         }
 
         $order = new Order();
+        $order->subId = Utilities::getRandomKey(16);
         $order->createdDate = date("Y-m-d H:i:s");
         $order->isPaid = false;
         $order->isApproved = false;
@@ -161,11 +177,22 @@ class Checkout extends Controller{
         foreach($carts as $cart){
             $order->products()->attach($cart->productId, [
                 "quantity" => $cart->quantity,
-                "price" => $cart->product->priceAfterSale,
-                "createdDate" => date("Y-m-d H:i:s")
+                "price" => $cart->product->priceAfterSale
             ]);
         }
         $customer->cartProducts()->sync([]);
+
+        Mail::to($customer)->send(new CreateOrder(
+            $order->toArray(),
+            OrderDetail::where("orderId", $order->id)
+            ->selectRaw("
+                order_detail.*,
+                (price * quantity) as subTotal
+            ")
+            ->with("product")
+            ->get()
+            ->toArray()
+        ));
 
         return response()->json([
             "message" => "Please complete the payment process!",
@@ -180,7 +207,6 @@ class Checkout extends Controller{
         ->where("isApproved", false)->first();
 
         $orderDetails = OrderDetail::where("orderId", $order->id)
-        ->orderByDesc("createdDate")
         ->selectRaw("
             order_detail.*,
             (price * quantity) as subTotal
@@ -238,6 +264,7 @@ class Checkout extends Controller{
             order_detail.*,
             (price * quantity) as subTotal
         ")
+        ->with("product")
         ->get();
 
         if(
@@ -262,25 +289,30 @@ class Checkout extends Controller{
             ])->withHeaders(["Content-type" => "application/json"]);
         }
 
-        $province = Http::get("https://provinces.open-api.vn/api/p/search/", [
-            "q" => request()->province
-        ])->object()[0];
-        $district = Http::get("https://provinces.open-api.vn/api/d/search/", [
-            "q" => request()->district,
-            "p" => $province->code
-        ])->object()[0];
-        $ward = Http::get("https://provinces.open-api.vn/api/w/search/", [
-            "q" => request()->ward,
-            "p" => $province->code,
-            "d" => $district->code
-        ])->object()[0];
+        // $province = Http::get("https://provinces.open-api.vn/api/p/search/", [
+        //     "q" => request()->province
+        // ])->object()[0];
+        // $district = Http::get("https://provinces.open-api.vn/api/d/search/", [
+        //     "q" => request()->district,
+        //     "p" => $province->code
+        // ])->object()[0];
+        // $ward = Http::get("https://provinces.open-api.vn/api/w/search/", [
+        //     "q" => request()->ward,
+        //     "p" => $province->code,
+        //     "d" => $district->code
+        // ])->object()[0];
 
         $order->firstName = request()->firstName;
         $order->lastName = request()->lastName;
         $order->phone = request()->phone;
-        $order->province = $province->name;
-        $order->district = $district->name;
-        $order->ward = $ward->name;
+        
+        // $order->province = $province->name;
+        // $order->district = $district->name;
+        // $order->ward = $ward->name;
+        $order->province = request()->province;
+        $order->district = request()->district;
+        $order->ward = request()->ward;
+        
         $order->street = request()->street;
         $order->note = request()->has("note") ? request()->note : "none";
 
@@ -297,8 +329,8 @@ class Checkout extends Controller{
                 $total = $subTotal - $sale;
 
                 $order->paymentUrl = $this->createVnpPayment(
-                    Utilities::getRandomKey(16),
-                    (string)Auth::id(),
+                    $order->id . "-" . $order->subId,
+                    (string)$order->id,
                     round($total)
                 );
             }
@@ -319,6 +351,11 @@ class Checkout extends Controller{
                 $product->save();
             }
 
+            Mail::to($customer)->send(new OrderSuccess(
+                $order->toArray(), 
+                $orderDetails->toArray()
+            ));
+            
             return response()->json([
                 "message" => "Ordered successfully!",
                 "success" => "/Customer/Cart/CartPage"
@@ -355,14 +392,14 @@ class Checkout extends Controller{
     public function createVnpPayment(string|int $orderId, string $orderInfo, float $amount): mixed{
         $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
         $vnp_Returnurl = "http://127.0.0.1:8000/Customer/Checkout/VnpReturnUrl";
-        $vnp_TmnCode = env("VNP_TmnCode"); //Mã website tại VNPAY 
+        $vnp_TmnCode = env("VNP_TmnCode"); //Mã website tại VNPAY
         $vnp_HashSecret = env("VNP_HashSecret"); //Chuỗi bí mật
     
         $vnp_TxnRef = $orderId; //Mã đơn hàng. Trong thực tế Merchant cần insert đơn hàng vào DB và gửi mã này sang VNPAY
         $vnp_OrderInfo = $orderInfo;
         $vnp_OrderType = "Ruper product bill";
         $vnp_Amount = $amount * 100;
-        $vnp_Locale = "VN";
+        $vnp_Locale = "vi-VN";
         $vnp_BankCode = "NCB";
         $vnp_IpAddr = $_SERVER["REMOTE_ADDR"];
         $vnp_ExpireDate = date("YmdHis", strtotime("+5 minutes"));  //Thời gian hết hạn
@@ -405,7 +442,7 @@ class Checkout extends Controller{
     
         $vnp_Url = $vnp_Url . "?" . $query;
         if(isset($vnp_HashSecret)){
-            $vnpSecureHash =   hash_hmac("sha512", $hashdata, $vnp_HashSecret);
+            $vnpSecureHash = hash_hmac("sha512", $hashdata, $vnp_HashSecret);
             $vnp_Url .= "vnp_SecureHash=" . $vnpSecureHash;
         }
 
@@ -438,20 +475,22 @@ class Checkout extends Controller{
         if($secureHash == $vnp_SecureHash){
             if(request()->vnp_ResponseCode == "00"){
                 
-                $customerId = (int)$inputData["vnp_OrderInfo"];
-                $customer = Customer::find($customerId);
-                if(!isset($customer)){
-                    return redirect("/Customer/Checkout/PaymentErrorPage");
-                }
-                
-                $order = Order::where("customerId", $customer->id)
-                ->where("isApproved", false)
-                ->first();
+                $orderId = (int)$inputData["vnp_OrderInfo"];
+                $order = Order::find($orderId);
                 if(!isset($order)){
+                    $this->createFailedPayment($inputData);
                     return redirect("/Customer/Checkout/PaymentErrorPage");
                 }
 
-                $orderDetails = OrderDetail::where("orderId", $order->id)->get();
+                $customer = Customer::find($order->customerId);
+                $orderDetails = OrderDetail::where("orderId", $order->id)
+                ->selectRaw("
+                    order_detail.*,
+                    (price * quantity) as subTotal
+                ")
+                ->with("product")
+                ->get();
+
                 if(
                     OrderDetail::where("orderId", $order->id)
                     ->whereHas("product", function(Builder $query): void{
@@ -468,22 +507,7 @@ class Checkout extends Controller{
                     }
                     $order->delete();
 
-                    $failedPayment = new FailedPayment();
-                    $failedPayment->createdDate = date("Y-m-d H:i:s");
-                    $failedPayment->amount =  $inputData["vnp_Amount"];
-                    $failedPayment->bankCode = $inputData["vnp_BankCode"];
-                    $failedPayment->bankTranNo = $inputData["vnp_BankTranNo"];
-                    $failedPayment->cardType = $inputData["vnp_CardType"];
-                    $failedPayment->orderInfo = $inputData["vnp_OrderInfo"];
-                    $failedPayment->payDate = $inputData["vnp_PayDate"];
-                    $failedPayment->responseCode = $inputData["vnp_ResponseCode"];
-                    $failedPayment->tmnCode = $inputData["vnp_TmnCode"];
-                    $failedPayment->transactionNo = $inputData["vnp_TransactionNo"];
-                    $failedPayment->transactionStatus = $inputData["vnp_TransactionStatus"];
-                    $failedPayment->txnRef = $inputData["vnp_TxnRef"];
-                    $failedPayment->isRefunded = false;
-                    $customer->failedPayments()->save($failedPayment);
-
+                    $this->createFailedPayment($inputData);
                     return redirect("/Customer/Checkout/PaymentErrorPage");
                 }
 
@@ -497,6 +521,10 @@ class Checkout extends Controller{
                     $product->save();
                 }
 
+                Mail::to($customer)->send(new OrderSuccess(
+                    $order->toArray(), 
+                    $orderDetails->toArray()
+                ));
                 return redirect("/Customer/Checkout/PaymentSuccessPage");
             } 
             else{
@@ -510,7 +538,26 @@ class Checkout extends Controller{
     public function paymentSuccessPage(): mixed{
         return view("Customer.PaymentSuccess");
     }
+
     public function paymentErrorPage(): mixed{
         return view("Customer.PaymentError");
+    }
+
+    private function createFailedPayment(array $inputData): void{
+        $failedPayment = new FailedPayment();
+        $failedPayment->createdDate = date("Y-m-d H:i:s");
+        $failedPayment->amount =  $inputData["vnp_Amount"];
+        $failedPayment->bankCode = $inputData["vnp_BankCode"];
+        $failedPayment->bankTranNo = $inputData["vnp_BankTranNo"];
+        $failedPayment->cardType = $inputData["vnp_CardType"];
+        $failedPayment->orderInfo = $inputData["vnp_OrderInfo"];
+        $failedPayment->payDate = $inputData["vnp_PayDate"];
+        $failedPayment->responseCode = $inputData["vnp_ResponseCode"];
+        $failedPayment->tmnCode = $inputData["vnp_TmnCode"];
+        $failedPayment->transactionNo = $inputData["vnp_TransactionNo"];
+        $failedPayment->transactionStatus = $inputData["vnp_TransactionStatus"];
+        $failedPayment->txnRef = $inputData["vnp_TxnRef"];
+        $failedPayment->isRefunded = false;
+        $failedPayment->save();
     }
 }

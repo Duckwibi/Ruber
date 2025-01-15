@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Customer;
 use App\Events\Customer\UpdateProductReview;
 use App\Http\Controllers\Controller;
 use App\Models\Brand;
+use App\Models\OrderDetail;
 use App\Models\PriceFilter;
 use App\Models\ProductCategory;
 use App\Models\ProductReview;
@@ -73,7 +74,18 @@ class Product extends Controller{
         $currentPage = $currentPage > $page ? $page : $currentPage;
 
         
-        $products = \App\Models\Product::where("productCategoryId", $id)
+        $products = \App\Models\Product::leftJoinSub(
+            OrderDetail::groupBy("productId")
+            ->selectRaw("
+                order_detail.productId,
+                sum(order_detail.quantity) as quantityTotal
+            "),
+            "order_detail_with_quantity_total",
+            function(JoinClause $query): void{
+                $query->on("order_detail_with_quantity_total.productId", "product.id");
+            }
+        )
+        ->where("productCategoryId", $id)
         ->when(isset($priceFilterId), function(Builder $query) use($priceFilter): void{
             $query->whereRaw("price - price * (sale / 100) between ? and ?", [$priceFilter->min, $priceFilter->max]);
         })
@@ -82,7 +94,9 @@ class Product extends Controller{
         })
         ->when(isset($sort), function(Builder $query) use($sort): void{
             switch($sort){
-                case 1: break;
+                case 1: 
+                    $query->orderByDesc("orderQuantityTotal");
+                    break;
                 case 2:
                     $query->orderByDesc("product_reviews_avg_product_reviewrate");
                     break;
@@ -97,7 +111,12 @@ class Product extends Controller{
             }
         })
         ->limit(9)->offset(($currentPage - 1) * 9)
-        ->selectRaw("product.*, (price - price * (sale / 100)) as priceAfterSale")
+        ->selectRaw("
+            product.*, 
+            (product.price - product.price * (product.sale / 100)) as priceAfterSale,
+            case when order_detail_with_quantity_total.quantityTotal is null then 0
+                else order_detail_with_quantity_total.quantityTotal end as orderQuantityTotal
+        ")
         ->withCount("productReviews")
         ->withAvg("productReviews", "product_review.rate")
         ->get();

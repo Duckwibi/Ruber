@@ -31,7 +31,7 @@
                                 <div class="sub-error">
                                     We're really sorry but we can't seem to find the page you werelooking for.
                                 </div>
-                                <a class="button" href="index-2.html">Back The Homepage</a>
+                                <a class="button" href="/Customer/Home/IndexPage">Back The Homepage</a>
                             </div>
                         </div>
                     </div>

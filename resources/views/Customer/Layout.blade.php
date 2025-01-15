@@ -26,10 +26,14 @@
 
 	@yield("Style")
 </head>
-
-<body class="page">
+@php
+	$titles = [
+		"Index Page"
+	];
+@endphp
+<body class="{{ in_array($title, $titles) ? "home" : "page" }}">
 	<div id="page" class="hfeed page-wrapper">
-		@include("Customer.Include.Header")
+		@include("Customer.Include.Header", ["title" => $title])
 
 		@yield("Content")
 
@@ -114,10 +118,10 @@
 
 			@php
 				$titles = [
-					"Home Page",
+					"Index Page",
 					"Product Category Page",
 					"Product Detail Page",
-					"Wishlist Page",
+					"Wishlist Page"
 				];
 			@endphp
 			@if(in_array($title, $titles))

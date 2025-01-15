@@ -30,5 +30,30 @@ class BlogSeeder extends Seeder{
             "blogCategoryId" => rand(1, 5),
             "adminId" => rand(1, 2)
         ])->create();
+
+        Blog::factory()->count(6)->state(fn(array $attribute): array => [
+            "title" => fake()->randomElement([
+                "Sale",
+                "Quick Ship",
+                "New Designs",
+                "Accidental Fabric Protection",
+                "Furniture Care",
+                "Gift Cards"
+            ]),
+            "content" => fake()->paragraph(100),
+            "isService" => true,
+            "createdDate" => fake()->date("Y-m-d H:i:s"),
+            "image" => fake()->randomElement([
+                "/storage/BlogImageUpload/1.jpg",
+                "/storage/BlogImageUpload/2.jpg",
+                "/storage/BlogImageUpload/3.jpg",
+                "/storage/BlogImageUpload/4.jpg",
+                "/storage/BlogImageUpload/5.jpg",
+                "/storage/BlogImageUpload/6.jpg",
+                "/storage/BlogImageUpload/7.jpg",
+            ]),
+            "blogCategoryId" => rand(1, 5),
+            "adminId" => rand(1, 2)
+        ])->create();
     }
 }

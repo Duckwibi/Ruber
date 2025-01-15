@@ -27,7 +27,7 @@
                         <h1 class="text-title-heading">Shopping Cart</h1>
                     </div>
                     <div class="breadcrumbs">
-                        <a href="index-2.html">Home</a><span class="delimiter"></span>Shopping Cart
+                        <a href="/Customer/Home/IndexPage">Home</a><span class="delimiter"></span>Shopping Cart
                     </div>
                 </div>
             </div>

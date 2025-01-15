@@ -8,6 +8,7 @@ return new class extends Migration{
     public function up(): void{
         Schema::create("order", function (Blueprint $table): void{
             $table->id();
+            $table->string("subId")->nullable(false);
             $table->dateTime("createdDate")->nullable(false);
             $table->boolean("isPaid")->nullable(false);
             $table->boolean("isApproved")->nullable(false);

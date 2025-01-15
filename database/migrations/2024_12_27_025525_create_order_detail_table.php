@@ -12,7 +12,6 @@ return new class extends Migration{
             $table->bigInteger("productId")->unsigned()->nullable(false);
             $table->integer("quantity")->nullable(false);
             $table->double("price")->nullable(false);
-            $table->dateTime("createdDate")->nullable(false);
 
             $table->foreign("orderId")->references("id")->on("order")
             ->onUpdate("cascade")->onDelete("cascade");

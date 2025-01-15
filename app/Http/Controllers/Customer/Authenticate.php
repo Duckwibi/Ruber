@@ -191,7 +191,7 @@ class Authenticate extends Controller{
 
         return response()->json([
             "message" => "Login successful!",
-            "success" => "/Customer/Home"
+            "success" => "/Customer/Home/IndexPage"
         ])->withHeaders(["Content-type" => "application/json"]);
     }
 
@@ -366,7 +366,7 @@ class Authenticate extends Controller{
 
         return response()->json([
             "message" => "Verify successful!",
-            "success" => "/Customer/Home"
+            "success" => "/Customer/Home/IndexPage"
         ])->withHeaders(["Content-type" => "application/json"]);
     }
 }

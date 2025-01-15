@@ -39,9 +39,6 @@ class Customer extends Authenticatable{
     public function orders(): HasMany{
         return $this->hasMany(Order::class, "customerId", "id");
     }
-    public function failedPayments(): HasMany{
-        return $this->hasMany(FailedPayment::class, "customerId", "id");
-    }
     
     protected $hidden = [
         "email",

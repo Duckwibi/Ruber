@@ -9,7 +9,7 @@ use Illuminate\Database\Seeder;
 
 class MenuSeeder extends Seeder{
     public function run(): void{
-        Menu::factory()->count(19)->state(fn(array $attribute): array => [
+        Menu::factory()->count(20)->state(fn(array $attribute): array => [
             "name" => "Menu",
             "url" => "#",
             "parentId" => 0,
@@ -19,6 +19,7 @@ class MenuSeeder extends Seeder{
         ])->sequence(
             fn(Sequence $sequence): array => [
                 "name" => "Home",
+                "url" => "/Customer/Home/IndexPage"
             ],
             fn(Sequence $sequence): array => [
                 "name" => "Product",
@@ -32,7 +33,7 @@ class MenuSeeder extends Seeder{
             ],
             fn(Sequence $sequence): array => [
                 "name" => "Account",
-                "order" => 4,
+                "order" => 5,
                 "type" => 2
             ],
             fn(Sequence $sequence): array => [
@@ -51,6 +52,7 @@ class MenuSeeder extends Seeder{
             ],
             fn(Sequence $sequence): array => [
                 "name" => "Profile",
+                "url" => "/Customer/Profile/DashboardPage",
                 "parentId" => 4,
                 "level" => 2,
                 "order" => 3,
@@ -115,6 +117,11 @@ class MenuSeeder extends Seeder{
                 "parentId" => 14,
                 "level" => 3,
                 "order" => 5,
+            ],
+            fn(Sequence $sequence): array => [
+                "name" => "Contact",
+                "url" => "/Customer/Contact/ContactPage",
+                "order" => 4,
             ],
         )->create();
     }

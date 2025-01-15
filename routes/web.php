@@ -177,6 +177,34 @@ Route::middleware([
             Route::get("/PaymentErrorPage", [App\Http\Controllers\Customer\Checkout::class, "paymentErrorPage"]);
         });
     });
+
+    Route::prefix("/Contact")->group(function(): void{
+
+        Route::get("/ContactPage", [App\Http\Controllers\Customer\Contact::class, "contactPage"]);
+        Route::post("/SendContact", [App\Http\Controllers\Customer\Contact::class, "sendContact"])
+        ->middleware([
+            "throttle:sendContact",
+            App\Http\Middleware\Customer\RecaptchaVerify::class
+        ]);
+    });
+
+    Route::prefix("/Profile")->group(function(): void{
+
+        Route::middleware([
+            App\Http\Middleware\Customer\CheckLogin::class
+        ])->group(function(): void{
+
+            Route::get("/DashboardPage", [App\Http\Controllers\Customer\Profile::class, "dashboardPage"]);
+            Route::get("/OrderListPage", [App\Http\Controllers\Customer\Profile::class, "orderListPage"]);
+            Route::get("/OrderDetailListPage", [App\Http\Controllers\Customer\Profile::class, "orderDetailListPage"]);
+            Route::get("/AccountDetailPage", [App\Http\Controllers\Customer\Profile::class, "accountDetailPage"]);
+            Route::post("/UpdateAccountDetail", [App\Http\Controllers\Customer\Profile::class, "updateAccountDetail"]);
+        });
+        
+    });
+
+    Route::prefix("/Home")->group(function(): void{
+
+        Route::get("/IndexPage", [App\Http\Controllers\Customer\Home::class, "indexPage"]);
+    });
 });
-
-

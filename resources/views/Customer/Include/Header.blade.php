@@ -1,4 +1,10 @@
-<header id="site-header" class="site-header header-v1 absolute">
+@php
+    $titles = [
+        "Index Page"
+    ];
+@endphp
+
+<header id="site-header" class="site-header header-v1 {{ in_array($title, $titles) ? "" : "absolute" }}">
     <div class="header-mobile">
         <div class="section-padding">
             <div class="section-container">
@@ -10,7 +16,7 @@
                     </div>
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-6 header-center">
                         <div class="site-logo">
-                            <a href="index-2.html">
+                            <a href="/Customer/Home/IndexPage">
                                 <img width="400" height="79" src="/Customer/media/logo.png" alt="Ruper – Furniture HTML Theme" />
                             </a>
                         </div>
@@ -58,7 +64,7 @@
                     <div class="row">
                         <div class="col-xl-3 col-lg-2 col-md-12 col-sm-12 col-12 header-left">
                             <div class="site-logo">
-                                <a href="index-2.html">
+                                <a href="/Customer/Home/IndexPage">
                                     <img width="400" height="79" src="/Customer/media/logo.png" alt="Ruper – Furniture HTML Theme" />
                                 </a>
                             </div>

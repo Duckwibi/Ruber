@@ -21,10 +21,6 @@ return new class extends Migration{
             $table->string("transactionStatus", 255)->nullable(false);
             $table->string("txnRef", 255)->nullable(false);
             $table->boolean("isRefunded")->nullable(false);
-            $table->bigInteger("customerId")->unsigned()->nullable(false);
-
-            $table->foreign("customerId")->references("id")->on("customer")
-            ->onUpdate("cascade")->onDelete("cascade");
         });
     }
     public function down(): void{
